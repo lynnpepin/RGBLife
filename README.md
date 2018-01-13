@@ -37,7 +37,7 @@ Dead cells can become living cells subject to the following rules:
  
 ---
 
-Simulates Conway's Game of Life on a torus.
+Simulates the RGB Game of Life on a torus (wrapping 2D array.)
 
 CLI usage:
 
