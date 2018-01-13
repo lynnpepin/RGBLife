@@ -24,7 +24,7 @@ def prey(cell):
     True
     """
     
-    raise NotImplementedError
+    return (cell + 1) % _N
 
 
 def predator(cell):
@@ -34,7 +34,7 @@ def predator(cell):
     True
     """
     
-    raise NotImplementedError
+    return (cell - 1) % _N
 
 
 def is_friendly(cell,neighbour):
@@ -50,7 +50,7 @@ def is_friendly(cell,neighbour):
     True 
     """
     
-    raise NotImplementedError
+    return (neighbour in (cell, prey(cell)))
 
 
 def is_like(cell,neighbour):
@@ -66,4 +66,4 @@ def is_like(cell,neighbour):
     False
     """
     
-    raise NotImplementedError
+    return (cell == neigbour)
