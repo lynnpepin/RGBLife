@@ -25,9 +25,10 @@ Live cells continue to live so long as they have ample friendly neighbours. Pred
 
    * **Overopulation**: Any live cell with 4 like neighbours dies
    * **Starvation**: Any live cell with fewer than two friendly neighbours dies
-   * **Encroachment**: Friendly neighbours of a live cell must outnumber predatory neighbors, else it is subject to encroachment.
+   * **Encroachment**: Friendly neighbours of a live cell must outnumber predatory neighbors by at lest two, else it is subject to encroachment.
    * **Conversion**: Any live cell subject to encroachment with three or more non-prey neighbours is converted to be a cell of it's own predator.
    * **Stifling**: Any live cell subject to encroachment but not conversion dies.
+   * **Survival**: Any cell that does not die from the previous rules survives another generation.
 
 Dead cells can become living cells subject to the following rules:
 
