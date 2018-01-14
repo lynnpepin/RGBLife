@@ -15,6 +15,14 @@ B = 2
 
 _N = 3  # 
 
+def to_rgb(cell):
+    """Return a tuple representing the color of the cell."""
+    return [(255,255,255), (255,0,0), (0,255,0), (0,0,255)][cell + 1]
+
+def from_rgb(RGB):
+    """Return the cell corresponding to the given RGB representation"""
+    return [(255,255,255), (255,0,0), (0,255,0), (0,0,255)].index(RGB) - 1
+
 def to_string(cell):
     """Return a string representation of the cell."""
     return [" ","R","G","B"][cell + 1]

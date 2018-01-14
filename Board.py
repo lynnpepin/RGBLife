@@ -4,8 +4,8 @@ Board(int width, int height, int[][] data) is an object representing
 the session of an RGB game of life.
 """
 
-from cells import *
 from copy import deepcopy
+from cells import *
 
 class Board():
     def __init__(self, width, height, data=None):
@@ -46,8 +46,8 @@ class Board():
         data, and resetting generation to 0.
         """
         self._data = data
-        self._height = len(self._data)
-        self._width = len(self._data[0])
+        self._width = len(self._data)
+        self._height = len(self._data[0])
         self._generation = 0
        
 
@@ -70,4 +70,9 @@ class Board():
 
 
     def data(self):
-        return self._data
+        """Returns a deepcopy of the data of the board."""
+        return deepcopy(self._data)
+
+
+    def size(self):
+        return (self._width, self._height)

@@ -12,6 +12,18 @@ class CellsTest(unittest.TestCase):
     def tearDown(self):
         pass
     
+    def test_to_rgb(self):
+        self.assertEqual((255,255,255),to_rgb(E))
+        self.assertEqual((255,0,0),to_rgb(R))
+        self.assertEqual((0,255,0),to_rgb(G))
+        self.assertEqual((0,0,255),to_rgb(B))
+    
+    def test_from_rgb(self):
+        self.assertEqual(E,from_rgb(255,255,255))
+        self.assertEqual(R,from_rgb(255,0,0))
+        self.assertEqual(G,from_rgb(0,255,0))
+        self.assertEqual(B,from_rgb(0,0,255))
+    
     def test_to_string(self):
         self.assertEqual(to_string(E)," ")
         self.assertEqual(to_string(R),"R")
@@ -174,41 +186,42 @@ class BoardTest(unittest.TestCase):
         self.board.set_board(self.other_data)
         self.assertEqual(0, self.board.generation())
         self.assertEqual(self.other_data, self.board.data())
+    
+    def test_size(self):
+        self.assertEqual((4,4),self.board.size())
+        self.board.set_board(([R,R,R],[R,R,R]))
+        self.assertEqual((2,3),self.board.size())
 
 
 class ToolsTest(unittest.TestCase):
     def setUp(self):
         self.initial_data = [ [G,R,E,R],[R,E,E,E],[B,R,E,E],[E,B,E,E] ]
-        self.next_data    = [ [R,E,E,E],[E,R,E,E],[B,E,E,E],[G,B,E,E] ]
-        self.second_data  = [ [E,B,E,E],[B,E,E,E],[E,B,E,E],[E,E,E,E] ]
-        self.empty_data   = [ [E,E,E,E],[E,E,E,E],[E,E,E,E],[E,E,E,E] ]
-        self.other_data   = [ [R,R,R,R],[G,G,G,G],[B,B,B,B],[E,E,E,E] ]
         self.board = Board(4,4, self.initial_data)
 
         self.input_image = "input.png"
-        self.output_image = "output.png"
-        self.initial_data_string = "GRBE\nRERB\nEEEE\nREEE"
+        self.initial_data_string = "GR R\nR   \nBR  \n B  "
 
     def tearDown(self):
         pass
 
     def test_pic_to_board(self):
         self.newboard = tools.pic_to_board(self.input_image)
-        self.assertEqual(self.initial_data, self.newboard.data)
+        self.assertEqual(self.initial_data, self.newboard.data())
 
     def test_save_as_pic(self):
-        tools.save_as_pic(self.newboard, "0.png")
+        tools.save_as_pic(self.board, "0.png")
         
         saved_image = Image.open("0.png").convert("RGB")
-        comparison_image = Image.open(self.output_image).convert("RGB")
+        comparison_image = Image.open(self.input_image).convert("RGB")
         
-        assertEqual(saved_image.getdata(), comparison_image.getdata())
+        self.assertEqual(
+            list(saved_image.getdata()), list(comparison_image.getdata()) )
         
         saved_image.close()
         comparison_image.close()
 
     def test_board_to_string(self):
-        self.assertEqual(self.initial_data_string, Tools.board_to_string(self.board.data))
+        self.assertEqual(self.initial_data_string, tools.board_to_string(self.board))
 
 
 if (__name__ == "__main__"):
