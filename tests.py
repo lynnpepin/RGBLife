@@ -154,7 +154,7 @@ class BoardTest(unittest.TestCase):
     def test_generation(self):
         self.assertEqual(0, self.board.generation())
 
-    def testiterate_board(self):
+    def test_iterate_board(self):
         self.assertEqual(self.initial_data, self.board.data())
         self.assertEqual(0, self.board.generation())
 
@@ -224,6 +224,14 @@ class ToolsTest(unittest.TestCase):
         self.assertEqual(self.initial_data_string, tools.board_to_string(self.board))
 
 
+class MoreBoardTests(unittest.TestCase):
+    # Board tests that rely on the validity of the tools
+    def setUp(self):
+        pass
+    def tearDown(self):
+        pass
+    
+
 if (__name__ == "__main__"):
     cells_suite = unittest.TestLoader().loadTestsFromTestCase(CellsTest)
     unittest.TextTestRunner(verbosity=2).run(cells_suite)
@@ -233,4 +241,6 @@ if (__name__ == "__main__"):
 
     tools_suite = unittest.TestLoader().loadTestsFromTestCase(ToolsTest)
     unittest.TextTestRunner(verbosity=2).run(tools_suite)
+    
+    
 

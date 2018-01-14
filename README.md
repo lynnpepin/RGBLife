@@ -4,14 +4,15 @@ A cellular automota based on Conway's Game of Life.
 
 This was created as a quick proof-of-concept mockup. It's not fast enough for large simulations.
 
+This was also created for **educational** purposes. It is a work in progress.
+
 ---
 
 Version 0.1.0
 
 To be done:
    
-   * Doesn't work right, despite unit tests. Time to diagnose!
-   
+   * Doesn't work right; I was only considering diagonal neighbours. Oops!
    * Add unit tests for error checking
    * Error checking as applicable
    * Rewrite the CLI under TDD (with error checking
