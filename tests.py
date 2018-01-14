@@ -19,10 +19,10 @@ class CellsTest(unittest.TestCase):
         self.assertEqual((0,0,255),to_rgb(B))
     
     def test_from_rgb(self):
-        self.assertEqual(E,from_rgb(255,255,255))
-        self.assertEqual(R,from_rgb(255,0,0))
-        self.assertEqual(G,from_rgb(0,255,0))
-        self.assertEqual(B,from_rgb(0,0,255))
+        self.assertEqual(E,from_rgb((255,255,255))  )
+        self.assertEqual(R,from_rgb((255,0,0)))
+        self.assertEqual(G,from_rgb((0,255,0)))
+        self.assertEqual(B,from_rgb((0,0,255)))
     
     def test_to_string(self):
         self.assertEqual(to_string(E)," ")

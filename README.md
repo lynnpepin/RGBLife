@@ -2,15 +2,22 @@ RGB Game of Life
 
 A cellular automota based on Conway's Game of Life.
 
+This was created as a quick proof-of-concept mockup. It's not fast enough for large simulations.
+
 ---
 
-Version 1.0
+Version 0.1.0
 
 To be done:
+   
+   * Doesn't work right, despite unit tests. Time to diagnose!
+   
    * Add unit tests for error checking
    * Error checking as applicable
    * Rewrite the CLI under TDD (with error checking
    * Add documentation to the Wiki
+
+
 ---
 
 Simulates the RGB Game of Life on a Torus.
@@ -57,7 +64,9 @@ CLI usage:
 
 e.g.:
 
-    python3 rgblife.py input.png -s -i 300 --noprint
+    python3 rgblife.py input.png -s output -i 300
+    # Iterates 300 steps of RGB Game of Life, outputs output_000.png, output_001.png, etc.
+    
 
 ---
 
