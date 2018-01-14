@@ -18,7 +18,6 @@ class Board():
         else:
             self._data = data
 
-
     def _get_neighbours(self, x, y, board_data):
         # A list of the four neighbours of cell x,y
         # [N,E,S,W]

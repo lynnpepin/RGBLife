@@ -4,6 +4,15 @@ A cellular automota based on Conway's Game of Life.
 
 ---
 
+Version 1.0
+
+To be done:
+   * Add unit tests for error checking
+   * Error checking as applicable
+   * Rewrite the CLI under TDD (with error checking
+   * Add documentation to the Wiki
+---
+
 Simulates the RGB Game of Life on a Torus.
 
 There are three classes of life; R, G, and B.
@@ -42,14 +51,13 @@ Simulates the RGB Game of Life on a torus (wrapping 2D array.)
 
 CLI usage:
 
-    -s --savepic    Save a pic of each iteration (e.g. 000.png, 001.png, ...)
-    -l --loadpic    Load the board from a black and white image.
+    -s --savepic f  Save a pic of each iteration to f, appended _xxx.png.
     -i --iterate n  Iterate n times, print the board at each iteration
     -p --print      Print the image to console during each iteration.
 
 e.g.:
 
-    python3 rgblife.py -l input.png -s -i 300 --noprint
+    python3 rgblife.py input.png -s -i 300 --noprint
 
 ---
 
