@@ -15,6 +15,9 @@ B = 2
 
 _N = 3  # 
 
+def to_string(cell):
+    """Return a string representation of the cell."""
+    return [" ","R","G","B"][cell + 1]
 
 def prey(cell):
     """Return the type of cell that is prey of the input cell

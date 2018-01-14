@@ -11,6 +11,12 @@ class CellsTest(unittest.TestCase):
         
     def tearDown(self):
         pass
+    
+    def test_to_string(self):
+        self.assertEqual(to_string(E)," ")
+        self.assertEqual(to_string(R),"R")
+        self.assertEqual(to_string(G),"G")
+        self.assertEqual(to_string(B),"B")
         
     def test_is_prey(self):
         self.assertEqual(prey(R),G)
@@ -34,7 +40,7 @@ class CellsTest(unittest.TestCase):
         self.assertFalse(is_like(G,R))
         self.assertFalse(is_like(G,B))
 
-    def testiterate_cell(self):
+    def test_iterate_cell(self):
         # Overpopulation
         self.assertEqual(iterate_cell(R, [R,R,R,R]), E)
         self.assertEqual(iterate_cell(G, [G,G,G,G]), E)
