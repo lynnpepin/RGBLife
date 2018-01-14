@@ -12,7 +12,7 @@ class CellsTest(unittest.TestCase):
     def tearDown(self):
         pass
         
-    def test_prey(self):
+    def test_is_prey(self):
         self.assertEqual(prey(R),G)
         self.assertEqual(prey(G),B)
         self.assertEqual(prey(B),R)
@@ -81,7 +81,7 @@ class CellsTest(unittest.TestCase):
         self.assertEqual(iterate_cell(E, [R,G,E,E]), E)
         self.assertEqual(iterate_cell(E, [E,E,E,E]), E)
         
-        self.assertEqual(iterate_cell(E, [B,B,G,E]), E)
+        self.assertEqual(iterate_cell(E, [B,B,G,E]), G)
 
 
 class BoardTest(unittest.TestCase):

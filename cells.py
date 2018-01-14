@@ -16,7 +16,6 @@ B = 2
 _N = 3  # 
 
 
-
 def prey(cell):
     """Return the type of cell that is prey of the input cell
     
