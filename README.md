@@ -45,7 +45,11 @@ CLI usage:
     -s --savepic    Save a pic of each iteration (e.g. 000.png, 001.png, ...)
     -l --loadpic    Load the board from a black and white image.
     -i --iterate n  Iterate n times, print the board at each iteration
-       --noprint    Don't print the board to console
+    -p --print      Print the image to console during each iteration.
+
+e.g.:
+
+    python3 rgblife.py -l input.png -s -i 300 --noprint
 
 ---
 
