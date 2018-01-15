@@ -52,62 +52,81 @@ class CellsTest(unittest.TestCase):
         self.assertFalse(is_like(G,R))
         self.assertFalse(is_like(G,B))
 
+    def test_classcount_test(self):
+        self.assertEqual(classcount([R,E,G,B,B,R,E,R]),[3,1,2])
+        self.assertEqual(classcount([R,R,R,R,G,G,B,E]),[4,2,1])
+        self.assertEqual(classcount([E,E,E,E,E,E,E,E]),[0,0,0])
+        self.assertEqual(classcount([R,R,R,R,R,R,R,E]),[7,0,0])
+        self.assertEqual(classcount([G,E,G,E,G,E,G,E]),[0,4,0])
+        self.assertEqual(classcount([E,E,E,B,E,B,E,B]),[0,0,3])
+        
     def test_iterate_cell(self):
-        # Overpopulation
-        self.assertEqual(iterate_cell(R, [R,R,R,R]), E)
-        self.assertEqual(iterate_cell(G, [G,G,G,G]), E)
-        self.assertEqual(iterate_cell(B, [B,B,B,B]), E)
+        # Old unit tests, adapted from iterate_cell(cell, neighbours)
+        # to iterate_cell(cell, counts), where counts
+        # Overpopulation    Like >= 4
+        self.assertEqual(iterate_cell(R, classcount([R,R,R,R,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(R, classcount([R,R,R,R,G,G,G,G])), E)
+        self.assertEqual(iterate_cell(G, classcount([G,G,G,G,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(G, classcount([G,G,G,G,R,R,R,R])), E)
+        self.assertEqual(iterate_cell(B, classcount([B,B,B,B,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(B, classcount([B,B,B,B,B,B,B,B])), E)
+
+        ##Encroachment      Pred >= Prey + Like + 1
+        # Conversion        Pred >= Prey + Like + 2 
+        self.assertEqual(iterate_cell(G, classcount([R,R,R,E,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(B, classcount([G,G,G,G,G,B,B,R])), G)
+        self.assertEqual(iterate_cell(R, classcount([B,B,B,B,B,B,B,B])), B)
+        # Stifling          Encroachmnt, but not conversion
+        self.assertEqual(iterate_cell(R, classcount([B,B,B,R,G,E,E,E])), E)
+        self.assertEqual(iterate_cell(G, classcount([R,R,R,R,G,G,G,E])), E)
+        self.assertEqual(iterate_cell(B, classcount([B,B,R,G,E,G,G,G])), E)
         
         # Survival
-        self.assertEqual(iterate_cell(R, [R,R,R,E]), R)
-        self.assertEqual(iterate_cell(G, [G,E,G,G]), G)
-        self.assertEqual(iterate_cell(B, [E,B,B,E]), B)
+        self.assertEqual(iterate_cell(R, classcount([R,R,R,E,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(G, classcount([G,E,E,G,E,E,E,E])), G)
+        self.assertEqual(iterate_cell(B, classcount([E,B,B,E,E,E,E,E])), B)
         
-        self.assertEqual(iterate_cell(R, [R,G,G,R]), R)
-        self.assertEqual(iterate_cell(G, [B,G,B,G]), G)
-        self.assertEqual(iterate_cell(B, [B,B,R,R]), B)
+        self.assertEqual(iterate_cell(R, classcount([R,G,G,R,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(G, classcount([B,G,B,G,E,E,E,E])), G)
+        self.assertEqual(iterate_cell(B, classcount([B,B,R,R,E,E,E,E])), B)
 
-        self.assertEqual(iterate_cell(R, [R,R,R,B]), R)
-        self.assertEqual(iterate_cell(G, [G,G,R,G]), G)
-        self.assertEqual(iterate_cell(B, [G,B,B,B]), B)
+        self.assertEqual(iterate_cell(R, classcount([R,G,G,G,G,G,G,G])), R)
+        self.assertEqual(iterate_cell(G, classcount([B,G,B,G,B,B,B,B])), G)
+        self.assertEqual(iterate_cell(B, classcount([B,B,B,G,R,R,R,R])), B)
 
-        self.assertEqual(iterate_cell(R, [R,G,G,B]), R)
-        self.assertEqual(iterate_cell(G, [B,G,R,G]), G)
-        self.assertEqual(iterate_cell(B, [G,B,R,B]), B)
 
-        # Conversion
-        self.assertEqual(iterate_cell(R, [B,B,R,E]), B)
-        self.assertEqual(iterate_cell(G, [R,R,R,G]), R)
-        self.assertEqual(iterate_cell(B, [B,G,G,G]), G)
+        self.assertEqual(iterate_cell(R, classcount([R,R,R,B,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(G, classcount([G,G,R,G,E,E,E,E])), G)
+        self.assertEqual(iterate_cell(B, classcount([G,B,B,B,E,E,E,E])), B)
 
-        # Starvation
-        self.assertEqual(iterate_cell(R, [E,E,R,E]), E)
-        self.assertEqual(iterate_cell(G, [G,E,E,E]), E)
-        self.assertEqual(iterate_cell(B, [E,E,E,R]), E)
-        self.assertEqual(iterate_cell(R, [E,E,E,E]), E)
-
-        # Dead cells
-        self.assertEqual(iterate_cell(E, [R,R,G,E]), R)
-        self.assertEqual(iterate_cell(E, [G,E,G,G]), G)
-        self.assertEqual(iterate_cell(E, [R,R,G,B]), E)
+        self.assertEqual(iterate_cell(R, classcount([R,G,G,B,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(G, classcount([B,G,R,G,E,E,E,E])), G)
+        self.assertEqual(iterate_cell(B, classcount([G,B,R,B,E,E,E,E])), B)
         
-        self.assertEqual(iterate_cell(E, [R,R,B,E]), B)
-        self.assertEqual(iterate_cell(E, [R,B,B,E]), B)
-        self.assertEqual(iterate_cell(E, [B,B,B,E]), B)
-
-        self.assertEqual(iterate_cell(E, [E,E,R,R]), E)
-        self.assertEqual(iterate_cell(E, [R,G,E,E]), E)
-        self.assertEqual(iterate_cell(E, [E,E,E,E]), E)
+        ##Dead cells
+        # Reproduction      Three neighbours of one kind
+        self.assertEqual(iterate_cell(E, classcount([G,E,G,G,E,E,E,E])), G)
+        self.assertEqual(iterate_cell(E, classcount([B,B,B,E,E,E,E,E])), B)
+        self.assertEqual(iterate_cell(E, classcount([R,R,R,E,E,E,E,E])), R)
         
-        self.assertEqual(iterate_cell(E, [B,B,G,E]), G)
-
+        # Expansion         pred+prey>=3, 1<=pred<=3
+        self.assertEqual(iterate_cell(E, classcount([R,R,G,E,E,E,E,E])), R)
+        self.assertEqual(iterate_cell(E, classcount([R,R,B,E,E,E,E,E])), B)
+        self.assertEqual(iterate_cell(E, classcount([R,B,B,E,E,E,E,E])), B)
+        self.assertEqual(iterate_cell(E, classcount([G,G,G,G,G,R,E,E])), R)
+        
+        # Remaining dead;
+        self.assertEqual(iterate_cell(E, classcount([E,E,R,R,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(E, classcount([R,G,E,E,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(E, classcount([G,G,G,G,R,R,R,R])), E)
+        self.assertEqual(iterate_cell(E, classcount([R,R,G,B,E,E,E,E])), E)
+        self.assertEqual(iterate_cell(E, classcount([E,E,E,E,E,E,E,E])), E)
+    
 
 class BoardTest(unittest.TestCase):
     def setUp(self):
         self.initial_data = [ [G,R,E,R],[R,E,E,E],[B,R,E,E],[E,B,E,E] ]
-        self.next_data    = [ [R,E,E,E],[E,R,E,E],[B,E,E,E],[G,B,E,E] ]
-        self.second_data  = [ [E,B,E,E],[B,E,E,E],[E,B,E,E],[E,E,E,E] ]
-        self.third_data   = [ [E,E,E,E],[E,B,E,E],[E,E,E,E],[E,E,E,E] ]
+        self.iter_01_data = [ [R,R,B,R],[R,E,R,E],[B,E,E,E],[E,B,B,E] ]
         self.empty_data   = [ [E,E,E,E],[E,E,E,E],[E,E,E,E],[E,E,E,E] ]
         self.other_data   = [ [R,R,R,R],[G,G,G,G],[B,B,B,B],[E,E,E,E] ]
         self.board = Board(4,4, self.initial_data)
@@ -122,31 +141,31 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(self.board.data()[1][1],E)
         self.assertEqual(self.board.data()[2][0],B)
 
-    def test_get_neighbours(self):
+    def test_get_neighbour_count(self):
         self.assertEqual(
-            self.board._get_neighbours(0,0,self.initial_data),
-            [R,R,R,E])
+            self.board._get_neighbour_count(0,0,self.initial_data),
+            [3,0,1])
         self.assertEqual(
-            self.board._get_neighbours(0,3,self.initial_data),
-            [E,E,G,E])
+            self.board._get_neighbour_count(0,3,self.initial_data),
+            [1,1,0])
         self.assertEqual(
-            self.board._get_neighbours(3,0,self.initial_data),
-            [E,G,B,B])
+            self.board._get_neighbour_count(3,0,self.initial_data),
+            [3,1,2])
         self.assertEqual(
-            self.board._get_neighbours(3,3,self.initial_data),
-            [E,R,E,E])
+            self.board._get_neighbour_count(3,3,self.initial_data),
+            [1,1,1])
         self.assertEqual(
-            self.board._get_neighbours(1,1,self.initial_data),
-            [R,R,E,R])
+            self.board._get_neighbour_count(1,1,self.initial_data),
+            [3,1,1])
         self.assertEqual(
-            self.board._get_neighbours(2,1,self.initial_data),
-            [B,B,E,E])
+            self.board._get_neighbour_count(2,1,self.initial_data),
+            [1,0,2])
         self.assertEqual(
-            self.board._get_neighbours(1,2,self.initial_data),
-            [E,E,E,E])
+            self.board._get_neighbour_count(1,2,self.initial_data),
+            [3,0,0])
         self.assertEqual(
-            self.board._get_neighbours(2,2,self.initial_data),
-            [R,E,E,E])
+            self.board._get_neighbour_count(2,2,self.initial_data),
+            [1,0,1])
 
     def test_data(self):
         self.assertEqual(self.initial_data, self.board.data())
@@ -159,19 +178,16 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(0, self.board.generation())
 
         self.board.iterate_board()
-        self.assertEqual(self.next_data, self.board.data())
+        self.assertEqual(self.iter_01_data, self.board.data())
         self.assertEqual(1, self.board.generation())
 
         self.board.iterate_board()
-        self.assertEqual(self.second_data, self.board.data())
         self.assertEqual(2, self.board.generation())
 
         self.board.iterate_board()
-        self.assertEqual(self.third_data, self.board.data())
         self.assertEqual(3, self.board.generation())
 
         self.board.iterate_board()
-        self.assertEqual(self.empty_data, self.board.data())
         self.assertEqual(4, self.board.generation())
 
     def test_clear(self):
@@ -196,11 +212,10 @@ class BoardTest(unittest.TestCase):
 class ToolsTest(unittest.TestCase):
     def setUp(self):
         self.initial_data = [ [G,R,E,R],[R,E,E,E],[B,R,E,E],[E,B,E,E] ]
+        self.iter_01_data = [ [R,R,B,R],[R,E,R,E],[B,E,E,E],[E,B,B,E] ]
         self.board = Board(4,4, self.initial_data)
-
         self.input_image = "input.png"
         self.initial_data_string = "GR R\nR   \nBR  \n B  "
-
     def tearDown(self):
         pass
 
@@ -221,7 +236,8 @@ class ToolsTest(unittest.TestCase):
         comparison_image.close()
 
     def test_board_to_string(self):
-        self.assertEqual(self.initial_data_string, tools.board_to_string(self.board))
+        self.assertEqual(
+            self.initial_data_string, tools.board_to_string(self.board))
 
 
 class MoreBoardTests(unittest.TestCase):

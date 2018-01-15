@@ -56,7 +56,7 @@ _save_iteration(board,num_iterations,num_iterations)
 
 if (args.print or args.printonce):
     print(tools.board_to_string(board))
-    print_border(board.size()[0])
+    _print_border(board.size()[0])
     print("Finished after",board.generation(),"generations.")
 
 

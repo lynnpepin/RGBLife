@@ -18,16 +18,16 @@ class Board():
         else:
             self._data = data
 
-    def _get_neighbours(self, x, y, board_data):
-        # A list of the four neighbours of cell x,y
-        # [N,E,S,W]
-        neighbours = [
-            board_data[x][(y-1)%self._height],
-            board_data[(x+1)%self._width][y],
-            board_data[x][(y+1)%self._height],
-            board_data[(x-1)%self._width][y]
-            ]
-        return neighbours
+    def _get_neighbour_count(self, x, y, board_data):
+        # A list of the eight neighbours of cell x,y
+        neighbours = []
+        # For each cell in a 3x3 range,
+        for xi in [(x-1)%self._width, x, (x+1)%self._width]:
+            for yi in [(y-1)%self._height, y, (y+1)%self._height]:
+                # If not the center cell,
+                if (x != xi or y != yi):
+                    neighbours.append(board_data[xi][yi])
+        return classcount(neighbours)
 
 
     def iterate_board(self):
@@ -35,8 +35,8 @@ class Board():
         board_copy = deepcopy(self._data)
         for x, row in enumerate(board_copy):
             for y, cell in enumerate(row):
-                neighbours = self._get_neighbours(x,y,board_copy)
-                self._data[x][y] = iterate_cell(cell,neighbours)
+                counts = self._get_neighbour_count(x,y,board_copy)
+                self._data[x][y] = iterate_cell(cell,counts)
         self._generation += 1
 
 
