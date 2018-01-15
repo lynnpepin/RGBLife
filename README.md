@@ -2,26 +2,24 @@ RGB Game of Life
 
 A cellular automota based on Conway's Game of Life.
 
-This was created as a quick proof-of-concept mockup. It's not fast enough for large simulations.
-
-This was also created for **educational** purposes. It is a work in progress.
+This was created as a quick proof-of-concept mockup.
 
 ---
 
-Version 0.1.0
+Simulates the RGB Game of Life on a torus (wrapping 2D array.)
 
-To be done:
-   
-   * Doesn't work right; I was only considering diagonal neighbours. Oops!
-   * Add unit tests for error checking
-   * Error checking as applicable
-   * Rewrite the CLI under TDD (with error checking
-   * Add documentation to the Wiki
+CLI usage:
 
+    -s --savepic f  Save a pic of each iteration to f, appended _xxx.png.
+    -i --iterate n  Iterate n times, print the board at each iteration
+    -p --print      Print the image to console during each iteration.
+
+e.g.:
+
+    python3 rgblife.py input.png -s output -i 300
+    # Iterates 300 steps of RGB Game of Life, outputs output_000.png, output_001.png, etc.
 
 ---
-
-Simulates the RGB Game of Life on a Torus.
 
 There are three classes of life; R, G, and B.
 
@@ -54,22 +52,13 @@ Dead cells can become living cells subject to the following rules:
  
 ---
 
-Simulates the RGB Game of Life on a torus (wrapping 2D array.)
+Version 1.0.0
 
-CLI usage:
-
-    -s --savepic f  Save a pic of each iteration to f, appended _xxx.png.
-    -i --iterate n  Iterate n times, print the board at each iteration
-    -p --print      Print the image to console during each iteration.
-
-e.g.:
-
-    python3 rgblife.py input.png -s output -i 300
-    # Iterates 300 steps of RGB Game of Life, outputs output_000.png, output_001.png, etc.
-    
-
----
-
-tools.py
-
+To be fixed/done:
+   
+   * (x,y) order is internally inconsistent
+   * There is minimal error checking
+   * The CLI has no unit tests; rewrite under TDD
+   * Add documentation to the Wiki
+   * It is slow; rewrite to make faster
     

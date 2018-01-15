@@ -214,7 +214,7 @@ class ToolsTest(unittest.TestCase):
         self.initial_data = [ [G,R,E,R],[R,E,E,E],[B,R,E,E],[E,B,E,E] ]
         self.iter_01_data = [ [R,R,B,R],[R,E,R,E],[B,E,E,E],[E,B,B,E] ]
         self.board = Board(4,4, self.initial_data)
-        self.input_image = "input.png"
+        self.input_image = "tests/input.png"
         self.initial_data_string = "GR R\nR   \nBR  \n B  "
     def tearDown(self):
         pass
@@ -225,13 +225,10 @@ class ToolsTest(unittest.TestCase):
 
     def test_save_as_pic(self):
         tools.save_as_pic(self.board, "0.png")
-        
         saved_image = Image.open("0.png").convert("RGB")
         comparison_image = Image.open(self.input_image).convert("RGB")
-        
         self.assertEqual(
             list(saved_image.getdata()), list(comparison_image.getdata()) )
-        
         saved_image.close()
         comparison_image.close()
 
@@ -240,12 +237,61 @@ class ToolsTest(unittest.TestCase):
             self.initial_data_string, tools.board_to_string(self.board))
 
 
-class MoreBoardTests(unittest.TestCase):
+class MoreBoardTest(unittest.TestCase):
     # Board tests that rely on the validity of the tools
     def setUp(self):
-        pass
+        self.img_A_0 = Image.open("tests/test_case_A_0.png").convert("RGB")
+        self.img_A_1 = Image.open("tests/test_case_A_1.png").convert("RGB")
+        self.img_A_2 = Image.open("tests/test_case_A_2.png").convert("RGB")
+        self.img_A_3 = Image.open("tests/test_case_A_3.png").convert("RGB")
+        self.board_A  = tools.pic_to_board("tests/test_case_A_0.png")
+        self.data_A_0 = tools.pic_to_board("tests/test_case_A_0.png").data()
+        self.data_A_1 = tools.pic_to_board("tests/test_case_A_1.png").data()
+        self.data_A_2 = tools.pic_to_board("tests/test_case_A_2.png").data()
+        self.data_A_3 = tools.pic_to_board("tests/test_case_A_3.png").data()
+        
+        self.img_B_0 = Image.open("tests/test_case_B_0.png").convert("RGB")
+        self.img_B_1 = Image.open("tests/test_case_B_1.png").convert("RGB")
+        self.board_B  = tools.pic_to_board("tests/test_case_B_0.png")
+        self.data_B_0 = tools.pic_to_board("tests/test_case_B_0.png").data()
+        self.data_B_1 = tools.pic_to_board("tests/test_case_B_1.png").data()
     def tearDown(self):
-        pass
+        self.img_A_0.close()
+        self.img_A_1.close()
+        self.img_A_2.close()
+        self.img_A_3.close()
+
+    def test_board_A(self):
+        self.assertEqual(self.board_A.data(),self.data_A_0)
+        self.assertEqual(self.board_A.generation(),0)
+        
+        self.board_A.iterate_board()
+        self.assertEqual(self.board_A.data(),self.data_A_1)
+        self.assertEqual(self.board_A.generation(),1)
+        
+        self.board_A.iterate_board()
+        self.assertEqual(self.board_A.data(),self.data_A_2)
+        self.assertEqual(self.board_A.generation(),2)
+        
+        self.board_A.iterate_board()
+        self.assertEqual(self.board_A.data(),self.data_A_3)
+        self.assertEqual(self.board_A.generation(),3)
+
+    def test_board_B(self):
+        self.assertEqual(self.board_B.data(),self.data_B_0)
+        self.assertEqual(self.board_B.generation(),0)
+        
+        self.board_B.iterate_board()
+        self.assertEqual(self.board_B.data(),self.data_B_1)
+        self.assertEqual(self.board_B.generation(),1)
+        
+        self.board_B.iterate_board()
+        self.assertEqual(self.board_B.data(),self.data_B_0)
+        self.assertEqual(self.board_B.generation(),2)
+        
+        self.board_B.iterate_board()
+        self.assertEqual(self.board_B.data(),self.data_B_1)
+        self.assertEqual(self.board_B.generation(),3)
     
 
 if (__name__ == "__main__"):
@@ -258,5 +304,6 @@ if (__name__ == "__main__"):
     tools_suite = unittest.TestLoader().loadTestsFromTestCase(ToolsTest)
     unittest.TextTestRunner(verbosity=2).run(tools_suite)
     
-    
+    more_board_suite = unittest.TestLoader().loadTestsFromTestCase(MoreBoardTest)
+    unittest.TextTestRunner(verbosity=2).run(more_board_suite)
 
