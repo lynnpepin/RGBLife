@@ -1,6 +1,0 @@
-__pycache__*
-output_*.png
-*.xcf
-.gitignore
-examples/*
-profiling

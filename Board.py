@@ -4,7 +4,6 @@ Board(int width, int height, int[][] data) is an object representing
 the session of an RGB game of life.
 """
 
-from copy import deepcopy
 from cells import *
 
 class Board():
@@ -17,33 +16,49 @@ class Board():
             self._data = [[E]*self._height]*self._width
         else:
             self._data = data
+            
+    def _custom_deepcopy(self,data):
+        """Deepcopy on a 2D list of integers. copy.deepcopy() is slow"""
+        out = []
+        for ii, row in enumerate(self._data):
+            out.append([])
+            for jj, cell in enumerate(row):
+                out[ii].append(cell)
+        return out
 
     def _get_neighbour_count(self, x, y, board_data):
         # A list of the eight neighbours of cell x,y
-        neighbours = [
+        return classcount(neighbours = [
             board_data[(x-1)%self._height][(y-1)%self._width],
             board_data[(x-1)%self._height][y],
             board_data[(x-1)%self._height][(y+1)%self._width],
             board_data[x][(y-1)%self._width],
-            #board_data[x][y],
+            #board_data[x][y], omitted
             board_data[x][(y+1)%self._width],
             board_data[(x+1)%self._height][(y-1)%self._width],
             board_data[(x+1)%self._height][y],
             board_data[(x+1)%self._height][(y+1)%self._width]
-            ]
-            
-        return classcount(neighbours)
+            ])
 
 
     def iterate_board(self):
         """Performs a single iteration upon the board's data."""
-        board_copy = deepcopy(self._data)
+        board_copy = self._custom_deepcopy(self._data)
         for x, row in enumerate(board_copy):
             for y, cell in enumerate(row):
                 counts = self._get_neighbour_count(x,y,board_copy)
                 self._data[x][y] = iterate_cell(cell,counts)
         self._generation += 1
 
+    def new_iterate_board(self):
+        # This code won't work! But I think it'll be more performant. How do? TODO
+        new_board = self._data = [[E]*self._height]*self._width
+        for x, row in enumerate(self._data):
+            for y, cell in enumerate(row):
+                counts = self._get_neighbour_count(x,y,self._data)
+                new_board[x][y] = iterate_cell(cell,counts)
+        self._data = new_board
+        self._generation += 1
 
     def set_board(self, data):
         """Updates the board's data, resetting width and height based on
@@ -75,7 +90,8 @@ class Board():
 
     def data(self):
         """Returns a deepcopy of the data of the board."""
-        return deepcopy(self._data)
+        # TODO: Profile this no-deepcopy implementation of data()
+        return self._custom_deepcopy(self._data)
 
 
     def size(self):

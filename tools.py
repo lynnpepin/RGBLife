@@ -3,7 +3,6 @@
 A number of tools useful for making the board readable by a human.
 """
 
-from copy import deepcopy
 from PIL import Image
 from cells import *
 from Board import Board
@@ -31,8 +30,8 @@ def save_as_pic(board, filename):
     """Save the board as an image located at filename."""
     image = Image.new("RGB",board.size())
     rgb_data = []
-    for x, row in enumerate(board.data()):
-        for y, cell in enumerate(row):
+    for row in board.data():
+        for cell in row:
             rgb_data.append(to_rgb(cell))
     image.putdata(rgb_data)
     image.save(filename,"PNG")
