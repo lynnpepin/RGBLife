@@ -20,15 +20,18 @@ class Board():
 
     def _get_neighbour_count(self, x, y, board_data):
         # A list of the eight neighbours of cell x,y
-        neighbours = []
-        # For each cell in a 3x3 range,
-        # TODO: Internal x/y layout is inconsistent; fix!
-        #       (Note x is mod height, not width)
-        for xi in [(x-1)%self._height, x, (x+1)%self._height]:
-            for yi in [(y-1)%self._width, y, (y+1)%self._width]:
-                # If not the center cell,
-                if (x != xi or y != yi):
-                    neighbours.append(board_data[xi][yi])
+        neighbours = [
+            board_data[(x-1)%self._height][(y-1)%self._width],
+            board_data[(x-1)%self._height][y],
+            board_data[(x-1)%self._height][(y+1)%self._width],
+            board_data[x][(y-1)%self._width],
+            #board_data[x][y],
+            board_data[x][(y+1)%self._width],
+            board_data[(x+1)%self._height][(y-1)%self._width],
+            board_data[(x+1)%self._height][y],
+            board_data[(x+1)%self._height][(y+1)%self._width]
+            ]
+            
         return classcount(neighbours)
 
 
