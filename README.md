@@ -4,6 +4,8 @@ A cellular automota based on Conway's Game of Life.
 
 This was created as a quick proof-of-concept mockup.
 
+![Animated GIF of a game of RGB Life](https://i.imgur.com/Gqz7mZW.gif)
+
 ---
 
 Simulates the RGB Game of Life on a torus (wrapping 2D array.)
@@ -52,7 +54,11 @@ Dead cells can become living cells subject to the following rules:
  
 ---
 
-Version 1.0.0
+Version 1.0.1
+
+History:
+1.0.1       Performance enhancements
+1.0.0       Initial release
 
 To be fixed/done:
    
