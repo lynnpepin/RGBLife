@@ -1,6 +1,12 @@
 """tools.py
 
 A number of tools useful for making the board readable by a human.
+
+Functions:
+
+    pic_to_board(string filename)                       returns Board()
+    save_as_pic(Board() board, string filename)         void
+    board_to_string(Board() board)                      string output
 """
 
 from PIL import Image

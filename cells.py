@@ -3,8 +3,27 @@
 Contains the names for different classes of cells, as well as functions
 defining the relationships between these different classes of cells.
 
-The implementation of the functions in this module rely on the ordering
-of the cells. That is, (R,G,B) -> (0, 1, 2)
+Defines:
+    E  = -1
+    R  = 0
+    G  = 1
+    B  = 2
+    _N = 3
+
+Functions:
+    to_rgb(int cell)                        returns (int, int, int) rgb
+    from_rgb((int, int, int) RGB)           returns int cell
+    to_string(int cell)                     returns string cell
+    
+    prey(int cell)                          returns int cell
+    predator(int cell)                      returns int cell
+    is_friendly(int c1, int c2)             returns bool friendly
+    is_like(int c1, int c2)                 returns bool like
+    
+    classcount(int[] neighbours)            returns [int, int, int] classcount
+    
+    iterate_cell(int cell, int[] counts)    returns int cell
+    
 """
 
 # The types of cells
@@ -50,6 +69,8 @@ def classcount(neighbours):
     
     >>>classcount([R,R,R,G,B,R,G,E])
     [4,2,1]
+    
+    No longer utilized as part of a performance enhancment
     """
     counts = [0]*_N
     for cell in neighbours:

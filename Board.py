@@ -2,9 +2,27 @@
 
 Board(int width, int height, int[][] data) is an object representing
 the session of an RGB game of life.
+
+Functions:
+
+    __init__(int width, int height, int[][] data=None)  returns Board()
+        
+    _custom_deepcopy(int[][] data))                     returns int[][] copy
+    _get_neighbour_count(int x, int y, int[][] data)    returns [int, int, int] count
+    
+    iterate_board()         void; iterates board
+    
+    set_board(int[][] data) void
+    clear()                 void
+    generation()            returns int generation
+    data()                  returns int[][] data
+    size()                  returns (int width, int height)
+
+
 """
 
 from cells import *
+from cells import _N
 
 class Board():
     def __init__(self, width, height, data=None):
@@ -18,27 +36,27 @@ class Board():
             self._data = data
             
     def _custom_deepcopy(self,data):
-        """Deepcopy on a 2D list of integers. copy.deepcopy() is slow"""
+        # Faster deepcopy on a list int[][]
         out = []
         for ii, row in enumerate(self._data):
             out.append([])
             for jj, cell in enumerate(row):
                 out[ii].append(cell)
         return out
-
+    
     def _get_neighbour_count(self, x, y, board_data):
-        # A list of the eight neighbours of cell x,y
-        return classcount(neighbours = [
-            board_data[(x-1)%self._height][(y-1)%self._width],
-            board_data[(x-1)%self._height][y],
-            board_data[(x-1)%self._height][(y+1)%self._width],
-            board_data[x][(y-1)%self._width],
-            #board_data[x][y], omitted
-            board_data[x][(y+1)%self._width],
-            board_data[(x+1)%self._height][(y-1)%self._width],
-            board_data[(x+1)%self._height][y],
-            board_data[(x+1)%self._height][(y+1)%self._width]
-            ])
+        # Return the number of of each type of neighbour
+        # returns [int redcount, int greencount, int bluecount]
+        counts = [0]*(_N+1)
+        counts[board_data[(x-1)%self._height][(y-1)%self._width]] +=1
+        counts[board_data[(x-1)%self._height][y]] +=1
+        counts[board_data[(x-1)%self._height][(y+1)%self._width]] +=1
+        counts[board_data[x][(y-1)%self._width]] +=1
+        counts[board_data[x][(y+1)%self._width]] +=1
+        counts[board_data[(x+1)%self._height][(y-1)%self._width]] +=1
+        counts[board_data[(x+1)%self._height][y]] +=1
+        counts[board_data[(x+1)%self._height][(y+1)%self._width]] +=1
+        return counts[0:3]
 
 
     def iterate_board(self):
@@ -49,16 +67,7 @@ class Board():
                 counts = self._get_neighbour_count(x,y,board_copy)
                 self._data[x][y] = iterate_cell(cell,counts)
         self._generation += 1
-
-    def new_iterate_board(self):
-        # This code won't work! But I think it'll be more performant. How do? TODO
-        new_board = self._data = [[E]*self._height]*self._width
-        for x, row in enumerate(self._data):
-            for y, cell in enumerate(row):
-                counts = self._get_neighbour_count(x,y,self._data)
-                new_board[x][y] = iterate_cell(cell,counts)
-        self._data = new_board
-        self._generation += 1
+        
 
     def set_board(self, data):
         """Updates the board's data, resetting width and height based on
