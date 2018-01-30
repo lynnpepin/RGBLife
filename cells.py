@@ -26,6 +26,8 @@ Functions:
     
 """
 
+import numpy as np
+
 # The types of cells
 E = -1  # Dead cell
 R = 0   # R, G, B are live cells
@@ -34,6 +36,8 @@ B = 2
 
 _N = 3  # Number of unique classes of cells.
 
+# TODO: Once unit tests pass, more efficiently "np" this.
+# TODO: Remove my (very helpful) list -> np array modifiers
 
 def to_rgb(cell):
     """Return a tuple representing the color of the cell."""
@@ -72,7 +76,7 @@ def classcount(neighbours):
     
     No longer utilized as part of a performance enhancment
     """
-    counts = [0]*_N
+    counts = np.array([0]*_N)
     for cell in neighbours:
         if(cell >= 0):
             counts[cell] += 1
@@ -80,19 +84,24 @@ def classcount(neighbours):
 
 def iterate_cell(cell, counts):
     # Returns the class a cell becomes based on its neighbour counts
+    # cell is the integer representing te cell, E, R, G, or B.
+    # counts is of the form [# red neighbours, # green neighbours, # blue neighbours]
     
     # Dead cell:
     #  Warning: This implementation requires _N == 3
     if (cell == E):
-        unique_classes = _N - counts.count(0)
+        #unique_classes = _N - counts.count(0)  # List equivalent of the below:
+        unique_classes = _N - (counts == 0).sum()
         # the unique classes of neighbours present
 
         if ((unique_classes == 1) and (3 in counts)): # reproduction
-            return counts.index(3)
+            #return counts.index(3) # List equivalent of the below:
+            return np.where(counts == 3)[0][0]
         elif (unique_classes == 2):
             # Expansion is possible
             # First, find the predatory and prey classes
-            missing_class = counts.index(0)
+            #missing_class = counts.index(0)
+            missing_class = np.where(counts == 0)[0][0]
             pred_class = prey(missing_class)
             prey_class = prey(pred_class)
             # No over/underpopulation

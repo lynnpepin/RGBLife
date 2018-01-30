@@ -23,6 +23,9 @@ Functions:
 
 from cells import *
 from cells import _N
+import numpy as np
+
+# Optimization TODO: Once unit tests pass, more efficiently generate numpy arrays (i.e. not via np.array(list))
 
 class Board():
     def __init__(self, width, height, data=None):
@@ -30,24 +33,18 @@ class Board():
         self._width = width
         self._height = height
 
-        if not data:
-            self._data = [[E]*self._height]*self._width
+        if data is None:
+            self._data = np.array([[E]*self._height]*self._width)
         else:
             self._data = data
             
     def _custom_deepcopy(self,data):
-        # Faster deepcopy on a list int[][]
-        out = []
-        for ii, row in enumerate(self._data):
-            out.append([])
-            for jj, cell in enumerate(row):
-                out[ii].append(cell)
-        return out
+        pass
     
     def _get_neighbour_count(self, x, y, board_data):
         # Return the number of of each type of neighbour
         # returns [int redcount, int greencount, int bluecount]
-        counts = [0]*(_N+1)
+        counts = np.array([0]*(_N+1))
         counts[board_data[(x-1)%self._height][(y-1)%self._width]] +=1
         counts[board_data[(x-1)%self._height][y]] +=1
         counts[board_data[(x-1)%self._height][(y+1)%self._width]] +=1
@@ -61,7 +58,8 @@ class Board():
 
     def iterate_board(self):
         """Performs a single iteration upon the board's data."""
-        board_copy = self._custom_deepcopy(self._data)
+        #board_copy = self._custom_deepcopy(self._data)
+        board_copy = np.copy(self._data)
         for x, row in enumerate(board_copy):
             for y, cell in enumerate(row):
                 counts = self._get_neighbour_count(x,y,board_copy)
@@ -86,10 +84,10 @@ class Board():
         If width and height are defined, reset the board to that size.
         """
         if (width == height == 0):
-            self._data = [[E]*self._width]*self._height
+            self._data = np.array([[E]*self._width]*self._height) #TODO: This is repeat code!
             self._generation = 0
         else:
-            self._data = [[E for ii in range(self.width)] for jj in range(self.height)]
+            self._data = np.array([[E for ii in range(self.width)] for jj in range(self.height)])
 
 
     def generation(self):
@@ -100,7 +98,8 @@ class Board():
     def data(self):
         """Returns a deepcopy of the data of the board."""
         # TODO: Profile this no-deepcopy implementation of data()
-        return self._custom_deepcopy(self._data)
+        #return self._custom_deepcopy(self._data)
+        return np.copy(self._data)
 
 
     def size(self):
