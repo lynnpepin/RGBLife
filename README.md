@@ -1,8 +1,6 @@
 RGB Game of Life
 
-A cellular automota based on Conway's Game of Life.
-
-This was created as a quick proof-of-concept mockup.
+A cellular automota with 3 kinds of life, based on Conway's Game of Life.
 
 ![Animated GIF of a game of RGB Life](https://i.imgur.com/Gqz7mZW.gif)
 
